@@ -14,10 +14,18 @@
             <li><a href="me">My Profile</a></li>
             <li><a href="#">Explore</a></li>
           </ul>
+          <form class="navbar-form pull-left">
+              <div class="input-group">
+                <input type="text" class="form-control" placeholder="Search" name="srch-term" id="srch-term">
+                <div class="input-group-btn">
+                  <button class="btn btn-default btn-primary" type="submit"><i class="glyphicon glyphicon-search"></i></button>
+                </div>
+              </div>
+          </form>
           <ul class="nav navbar-nav navbar-right">
           {% if current_user.is_authenticated() %}
             <ul class="nav navbar-nav">
-              <li><p class="navbar-text">Welcome, {[ current_user.first_name ]} {[ current_user.last_name ]}!</p></li>
+              <li><p class="navbar-text">Welcome Back, {[ current_user.first_name ]} {[ current_user.last_name ]}!</p></li>
             <li><a href="logout">Logout</a></li>
             </ul>
           {% else %}

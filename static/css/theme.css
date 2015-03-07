@@ -3,8 +3,14 @@
 /* Padding below the footer and lighter body text */
 
 body {
-  padding-bottom: 40px;
+  padding-top: 40px;
   color: #5a5a5a;
+}
+
+footer {
+  margin-top:20px;
+  padding-top:20px;
+  padding-bottom:20px;
 }
 
 /* CUSTOMIZE THE CAROUSEL
@@ -13,10 +19,11 @@ body {
 /* Carousel base class */
 .carousel {
   height: 500px;
-  margin-bottom: 60px;
+  margin-bottom: 10px;
 }
 /* Since positioning the image, we need to help out the caption */
 .carousel-caption {
+  bottom: 100px;
   z-index: 10;
 }
 
