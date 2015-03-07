@@ -7,7 +7,7 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="#">Compile My Style</a>
+          <a class="navbar-brand" href="/">Compile My Style</a>
         </div>
         <div id="navbar" class="collapse navbar-collapse">
           <ul class="nav navbar-nav">
@@ -15,7 +15,13 @@
             <li><a href="#">Explore</a></li>
           </ul>
           <ul class="nav navbar-nav navbar-right">
+          {% if current_user.is_authenticated() %}
+            <ul class="nav navbar-nav">
+              <li><p class="navbar-text">Welcome, {[ current_user.first_name ]} {[ current_user.last_name ]}!</p></li>
+            </ul>
+          {% else %}
             <a class="btn btn-block btn-social btn-lg btn-facebook" href="login"><i class="fa fa-facebook"></i> Sign in with Facebook</a>
+          {% endif %}
           </ul>
         </div><!--/.nav-collapse -->
       </div>

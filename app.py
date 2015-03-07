@@ -1,17 +1,32 @@
 from flask import Flask, render_template, request, url_for, redirect, session
-from flask_oauth import OAuth
+from flask.ext.sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
+from flask_oauth import OAuth
 import os
-
-#from model import User
 
 app = Flask(__name__)
 
-DEBUG = True
-SECRET_KEY = "password"
+DEBUG = False
+SECRET_KEY = "sheep"
 
 app.debug = DEBUG
 app.secret_key = SECRET_KEY
+
+# Changing jinja delimiters so won't interfere with AngularJS
+app.jinja_env.variable_start_string = '{['
+app.jinja_env.variable_end_string = ']}'
+
+db = SQLAlchemy(app)
+
+# models depends on db
+from models import *
+
+login_manager = LoginManager()
+login_manager.init_app(app)
+
+@login_manager.user_loader
+def load_user(userid):
+  return User.query.get(userid)
 
 FACEBOOK_APP_ID = "928787610474878"
 FACEBOOK_APP_SECRET = "b8287fd361cf054c37a5d30b6122237b"
@@ -46,8 +61,15 @@ def facebook_authorized(resp):
            request.args['error_description'])
   session['oauth_token'] = (resp['access_token'], '')
   me = facebook.get('/me')
-  return 'Logged in as id=%s name=%s redirect=%s' % \
-         (me.data['id'], me.data['name'], request.args.get('next'))
+  user = User.query.filter(User.fb_id == me['id']).first()
+  if user is None:
+    new_user = User(first_name=me['first_name'], last_name=me['last_name'])
+    db.session.add(new_user)
+    db.session.commit()
+    login_user(new_user)
+  else:
+    login_user(user)
+  return redirect(url_for('index'))
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
@@ -57,7 +79,7 @@ def get_facebook_oauth_token():
 def show_userprofile():
   return "0"
 
-@app.route('/user/<username>')
+@app.route('/user/<fb_id>')
 def show_users():
   return "0"
 
