@@ -1,12 +1,12 @@
-from flask import Flask, render_template, request, url_for, redirect, session
+from flask import Flask, render_template, request, redirect, url_for, session
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask_login import LoginManager
+from flask_login import LoginManager, login_required
 from flask_oauth import OAuth
 import os
 
 app = Flask(__name__)
 
-DEBUG = False
+DEBUG = True
 SECRET_KEY = "sheep"
 
 app.debug = DEBUG
@@ -16,6 +16,7 @@ app.secret_key = SECRET_KEY
 app.jinja_env.variable_start_string = '{['
 app.jinja_env.variable_end_string = ']}'
 
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
 # models depends on db
@@ -27,6 +28,10 @@ login_manager.init_app(app)
 @login_manager.user_loader
 def load_user(userid):
   return User.query.get(userid)
+
+@app.route('/')
+def index():
+  return render_template('index.html')
 
 FACEBOOK_APP_ID = "928787610474878"
 FACEBOOK_APP_SECRET = "b8287fd361cf054c37a5d30b6122237b"
@@ -42,10 +47,6 @@ facebook = oauth.remote_app('facebook',
     request_token_params={'scope': 'email'}
 )
 
-@app.route('/')
-def index():
-  return render_template('index.html')
-
 @app.route('/login')
 def facebook_login():
   return facebook.authorize(callback=url_for('facebook_authorized',
@@ -55,27 +56,29 @@ def facebook_login():
 @app.route('/login/authorized')
 @facebook.authorized_handler
 def facebook_authorized(resp):
+  next_url = request.args.get('next') or url_for('index')
   if resp is None:
     return 'Access denied: reason=%s error=%s' % (
            request.args['error_reason'],
            request.args['error_description'])
   session['oauth_token'] = (resp['access_token'], '')
-  me = facebook.get('/me')
-  user = User.query.filter(User.fb_id == me['id']).first()
+  user_data = facebook.get('/me').data
+  user = User.query.filter(User.fb_id == user_data['id']).first()
   if user is None:
-    new_user = User(first_name=me['first_name'], last_name=me['last_name'])
+    new_user = User(first_name=user_data['first_name'], last_name=user_data['last_name'])
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
   else:
     login_user(user)
-  return redirect(url_for('index'))
+  return redirect(next_url)
 
 @facebook.tokengetter
 def get_facebook_oauth_token():
   return session.get('oauth_token')
 
 @app.route('/me')
+@login_required
 def show_userprofile():
   return "0"
 
