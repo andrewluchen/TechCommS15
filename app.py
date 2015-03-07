@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, session
 from flask.ext.sqlalchemy import SQLAlchemy
-from flask_login import LoginManager, login_user, login_required
+from flask_login import LoginManager, login_user, logout_user, login_required
 from flask_oauth import OAuth
 import os
 
@@ -19,7 +19,7 @@ app.jinja_env.variable_end_string = ']}'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL']
 db = SQLAlchemy(app)
 
-# models depends on db
+# importing models dependent on db
 from models import *
 
 login_manager = LoginManager()
@@ -33,18 +33,19 @@ def load_user(userid):
 def index():
   return render_template('index.html')
 
+# implementing Facebook OAuth login
 FACEBOOK_APP_ID = "928787610474878"
 FACEBOOK_APP_SECRET = "b8287fd361cf054c37a5d30b6122237b"
 
 oauth = OAuth()
 facebook = oauth.remote_app('facebook',
-    base_url='https://graph.facebook.com/',
-    request_token_url=None,
-    access_token_url='/oauth/access_token',
-    authorize_url='https://www.facebook.com/dialog/oauth',
-    consumer_key=FACEBOOK_APP_ID,
-    consumer_secret=FACEBOOK_APP_SECRET,
-    request_token_params={'scope': 'email'}
+  base_url='https://graph.facebook.com/',
+  request_token_url=None,
+  access_token_url='/oauth/access_token',
+  authorize_url='https://www.facebook.com/dialog/oauth',
+  consumer_key=FACEBOOK_APP_ID,
+  consumer_secret=FACEBOOK_APP_SECRET,
+  request_token_params={'scope': 'email'}
 )
 
 @app.route('/login')
@@ -73,18 +74,31 @@ def facebook_authorized(resp):
     login_user(user)
   return redirect(next_url)
 
+@app.route('/logout')
+def logout():
+  logout_user()
+  return redirect(url_for('index'))
+
 @facebook.tokengetter
 def get_facebook_oauth_token():
   return session.get('oauth_token')
 
-@app.route('/me')
-@login_required
-def show_userprofile():
-  return "0"
 
-@app.route('/user/<fb_id>')
+@app.route('/me')
+#@login_required
+def show_userprofile():
+  return render_template('my_profile.html',
+                         user=current_user)
+
+@app.route('/<fb_id>')
 def show_users():
-  return "0"
+  user = User.query.filter_by(fb_id=fb_id).first()
+  if user is None:
+    flash('User %s not found.' % nickname)
+    return redirect(url_for('index'))
+  else:
+    return render_template('user_profile.html',
+                           user=user)
 
 if __name__ == "__main__":
   # Bind to PORT if defined, otherwise default to 5000.
