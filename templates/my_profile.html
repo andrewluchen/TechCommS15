@@ -10,8 +10,27 @@
 {% include 'navbar.html' %}
     
     <div class="container">
-      <h1>Bootstrap starter template</h1>
-      <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+      <h1>{[user.first_name]} {[user.last_name]}</h1>
+      <div class="form-horizontal">
+        <div class="form-group">
+          <div class="col-md-5">
+            <img class="featurette-image img-responsive" data-src="foo" alt="Your bod goes here">
+          </div>
+          <div class="col-md-7">
+            <h2>About</h2>
+            <textarea class="form-control" rows="3">Damn it would be nice if the stuff I typed in here could be saved</textarea>
+          </div>
+        </div>
+      </div>
+      
+      <div class="form-horizontal">
+        <div class="form-group">
+          <div class="col-md-6">
+            <h2>Preferences</h2>
+            <textarea class="form-control" rows="3">Damn it would be nice if the stuff I typed in here could be saved</textarea>
+          </div>
+        </div>
+      </div>
     </div><!-- /.container -->
     
 {% include 'footer.html' %}

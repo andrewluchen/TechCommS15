@@ -86,12 +86,12 @@ def get_facebook_oauth_token():
 
 @app.route('/me')
 #@login_required
-def show_userprofile():
+def show_me():
   return render_template('my_profile.html',
                          user=current_user)
 
 @app.route('/<fb_id>')
-def show_users():
+def show_user():
   user = User.query.filter_by(fb_id=fb_id).first()
   if user is None:
     flash('User %s not found.' % nickname)
