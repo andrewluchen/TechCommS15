@@ -4,6 +4,8 @@ from flask_login import LoginManager, login_user, logout_user, current_user, log
 from flask_oauth import OAuth
 import os
 
+temp = 1
+
 app = Flask(__name__)
 
 DEBUG = True
