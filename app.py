@@ -91,7 +91,7 @@ def show_me():
                          user=current_user)
 
 @app.route('/<fb_id>')
-def show_user():
+def show_user(fb_id):
   user = User.query.filter_by(fb_id=fb_id).first()
   if user is None:
     flash('User %s not found.' % nickname)
