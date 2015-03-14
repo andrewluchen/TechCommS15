@@ -16,7 +16,7 @@ app.secret_key = SECRET_KEY
 app.jinja_env.variable_start_string = '{['
 app.jinja_env.variable_end_string = ']}'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] # Comment out when working on local
+#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] # Comment out when working on local
 db = SQLAlchemy(app)
 
 # importing models dependent on db
@@ -85,7 +85,7 @@ def get_facebook_oauth_token():
 
 
 @app.route('/me')
-@login_required
+#@login_required
 def show_me():
   return render_template('my_profile.html',
                          user=current_user)

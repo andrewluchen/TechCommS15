@@ -37,6 +37,19 @@
             </div>
           </div>
         </div>
+        <div class="col-md-12">
+          <div class="form-group">
+            <label for="user_file_input">Upload Images</label>
+            <input id="user_file_input" type="file" multiple="true">
+            <script>
+              $("#user_file_input").fileinput({
+                maxFileCount: 10,
+                allowedFileTypes: ["image"]
+              });
+            </script>
+            <p class="help-block">Your image will go nowhere until we implement this.</p>
+          </div>
+        </div>
       </div>
       <div class="col-md-4">
         <div class="panel-heading panel-heading-gray">
