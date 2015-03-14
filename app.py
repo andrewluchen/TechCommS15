@@ -66,7 +66,7 @@ def facebook_authorized(resp):
   user_data = facebook.get('/me').data
   user = User.query.filter(User.fb_id == user_data['id']).first()
   if user is None:
-    new_user = User(first_name=user_data['first_name'], last_name=user_data['last_name'])
+    new_user = User(fb_id=user_data['id'], first_name=user_data['first_name'], last_name=user_data['last_name'])
     db.session.add(new_user)
     db.session.commit()
     login_user(new_user)
