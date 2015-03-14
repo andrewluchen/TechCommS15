@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, url_for, flash, request, redirect, jsonify, session
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_oauth import OAuth
@@ -16,7 +16,7 @@ app.secret_key = SECRET_KEY
 app.jinja_env.variable_start_string = '{['
 app.jinja_env.variable_end_string = ']}'
 
-#app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] # Comment out when working on local
+app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] # Comment out when working on local
 db = SQLAlchemy(app)
 
 # importing models dependent on db
@@ -85,10 +85,15 @@ def get_facebook_oauth_token():
 
 
 @app.route('/me')
-#@login_required
+@login_required
 def show_me():
   return render_template('my_profile.html',
                          user=current_user)
+
+@app.route('/me/upload', methods=['POST'])
+def me_upload():
+  uploaded_file = request.files.get("file_data")
+  return jsonify(error="Flask received " + str(uploaded_file) + " , now implement me")
 
 @app.route('/<fb_id>')
 def show_user(fb_id):

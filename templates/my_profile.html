@@ -40,11 +40,12 @@
         <div class="col-md-12">
           <div class="form-group">
             <label for="user_file_input">Upload Images</label>
-            <input id="user_file_input" type="file" multiple="true">
+            <input id="user_file_input" type="file" class="file" multiple="true">
             <script>
               $("#user_file_input").fileinput({
                 maxFileCount: 10,
-                allowedFileTypes: ["image"]
+                uploadAsync: true,
+                uploadUrl: "me/upload"
               });
             </script>
             <p class="help-block">Your image will go nowhere until we implement this.</p>
