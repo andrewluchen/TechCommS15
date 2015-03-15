@@ -2,7 +2,7 @@ from flask import Flask, render_template, url_for, flash, request, redirect, jso
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_oauth import OAuth
-import os
+import os, getpass
 
 app = Flask(__name__)
 
@@ -16,7 +16,11 @@ app.secret_key = SECRET_KEY
 app.jinja_env.variable_start_string = '{['
 app.jinja_env.variable_end_string = ']}'
 
-app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] # Comment out when working on local
+if (getpass.getuser() == "andrew"):
+  app.config['SQLALCHEMY_DATABASE_URI'] = "postgres://username:password@localhost/test"
+else:
+  app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'] # Comment out when working on local
+  pass
 db = SQLAlchemy(app)
 
 # importing models dependent on db
