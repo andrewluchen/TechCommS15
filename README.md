@@ -11,9 +11,14 @@ Compile My Style will be a web application with the purpose of helping its users
 * Flask-Login 0.2.11 (`pip install flask-login`)
 * Flask-OAuth 0.12 (`pip install flask-oauth`)
 * Flask-SQLAlchemy 2.0 (`pip install flask-sqlalchemy`)
+* PostgreSQL (`sudo apt-get install postgresql`)
 * psycopg2 2.5.3 (`pip install psycopg2`)
 
 To build:
 ```bash
 $ git clone git@github.com:smcnichols/TechCommS15.git
+$ cd TechCommS15
+$ heroku pg:pull HEROKU_POSTGRESQL_GRAY your_local_database_name_here
 $ python app.py
+```
+
