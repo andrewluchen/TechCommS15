@@ -6,8 +6,9 @@ class User(db.Model):
   fb_id = db.Column(db.String)
   first_name = db.Column(db.String)
   last_name = db.Column(db.String)
+  profile = db.relationship("Profile", uselist=False, backref="users")
 
-  def __init__(self, fb_id = None, first_name=None, last_name=None):
+  def __init__(self, fb_id=None, first_name=None, last_name=None):
     self.fb_id = fb_id
     self.first_name = first_name
     self.last_name = last_name
@@ -23,3 +24,62 @@ class User(db.Model):
 
   def get_id(self):
     return unicode(self.id)
+
+class Picture(db.Model):
+  __tablename__ = 'pictures'
+  id = db.Column(db.Integer, primary_key=True)
+  file_path = db.Column(db.String, nullable=False)
+  profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+
+  def __init__(self, file_path=None, profile_id=None):
+    self.file_path = file_path
+    self.profile_id = profile_id
+
+  def get_id(self):
+    return unicode(self.id)
+
+  def get_profile_id(self):
+    return unicode(self.profile_id)
+
+class Recommendation(db.Model):
+  __tablename__ = 'recommendations'
+  id = db.Column(db.Integer, primary_key=True)
+  profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+
+  def __init__(self, profile_id=None):
+    self.profile_id = profile_id
+
+  def get_id(self):
+    return unicode(self.id)
+
+  def get_profile_id(self):
+    return unicode(self.profile_id)
+  
+class Profile(db.Model):
+  __tablename__ = 'profiles'
+  id = db.Column(db.Integer, primary_key=True)
+  user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+  pictures = db.relationship("Picture")
+  recommendations = db.relationship("Recommendation")
+  pro_pic = db.Column(db.String)
+  about = db.Column(db.String)
+  preferences = db.Column(db.String)
+  num_followers = db.Column(db.Integer)
+  num_styles = db.Column(db.Integer)
+  num_karma = db.Column(db.Integer)
+
+  def __init__(self, user_id=None, pro_pic=None, about=None, preferences=None,
+    num_followers=None, num_styles=None, num_karma=None):
+    self.user_id = user_id
+    self.pro_pic = pro_pic
+    self.about = about
+    self.preferences = preferences
+    self.num_followers = num_followers
+    self.num_styles = num_styles
+    self.num_karma = num_karma
+
+  def get_id(self):
+    return unicode(self.id)
+
+  def get_user_id(self):
+    return unicode(self.user_id)
