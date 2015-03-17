@@ -6,8 +6,6 @@ from dropbox.client import DropboxClient
 import os
 import getpass
 
-temp = 1
-
 app = Flask(__name__)
 
 DEBUG = True
