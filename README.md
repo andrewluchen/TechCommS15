@@ -11,8 +11,18 @@ Compile My Style will be a web application with the purpose of helping its users
 * Flask-Login 0.2.11 (`pip install flask-login`)
 * Flask-OAuth 0.12 (`pip install flask-oauth`)
 * Flask-SQLAlchemy 2.0 (`pip install flask-sqlalchemy`)
-* PostgreSQL (`sudo apt-get install postgresql`)
+* PostgreSQL (`apt-get install postgresql`)
 * psycopg2 2.5.3 (`pip install psycopg2`)
+* Werkzeug 0.9.6 (`pip install Werkzeug==0.9.6`)
+* dropbox 2.2.0 (`pip install dropbox`)
+
+
+### Notes about installation
+
+We are installing Werkzeug 0.9.6 because Werkzeug stat seems to cause `ImportError: No module named _winreg` with dropbox 2.2.0
+
+
+## Setup & Installation
 
 To build:
 ```bash
@@ -21,4 +31,3 @@ $ cd TechCommS15
 $ heroku pg:pull HEROKU_POSTGRESQL_GRAY your_local_database_name_here
 $ python app.py
 ```
-

@@ -2,7 +2,9 @@ from flask import Flask, render_template, url_for, flash, request, redirect, jso
 from flask.ext.sqlalchemy import SQLAlchemy
 from flask_login import LoginManager, login_user, logout_user, current_user, login_required
 from flask_oauth import OAuth
-import os, getpass
+from dropbox.client import DropboxClient
+import os
+import getpass
 
 app = Flask(__name__)
 
@@ -12,7 +14,7 @@ SECRET_KEY = "sheep"
 app.debug = DEBUG
 app.secret_key = SECRET_KEY
 
-# Changing jinja delimiters so won't interfere with AngularJS
+# changing jinja delimiters so won't interfere with AngularJS
 app.jinja_env.variable_start_string = '{['
 app.jinja_env.variable_end_string = ']}'
 
@@ -87,6 +89,9 @@ def logout():
 def get_facebook_oauth_token():
   return session.get('oauth_token')
 
+# implementing third-party dropbox storage for user files
+DROPBOX_ACCESS_TOKEN = "rL0DF7AV9PAAAAAAAAAABk4ZmCRtES_UH33Ty8nV7Za4n22LDFUwJcA7h3do2OGe"
+dropbox_client = DropboxClient(DROPBOX_ACCESS_TOKEN)
 
 @app.route('/me')
 @login_required
@@ -95,9 +100,13 @@ def show_me():
                          user=current_user)
 
 @app.route('/me/upload', methods=['POST'])
+@login_required
 def me_upload():
   uploaded_file = request.files.get("file_data")
-  return jsonify(error="Flask received " + str(uploaded_file) + " , now implement me")
+  filename = uploaded_file.filename
+  dropbox_response = dropbox_client.put_file(filename, uploaded_file)
+  dropbox_filepath = dropbox_response['path']
+  return jsonify(error="Flask received file. Located at Dropbox filepath: " + str(dropbox_filepath))
 
 @app.route('/<fb_id>')
 def show_user(fb_id):
