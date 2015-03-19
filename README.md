@@ -22,7 +22,7 @@ Compile My Style will be a web application with the purpose of helping its users
 We are installing Werkzeug 0.9.6 because Werkzeug stat seems to cause `ImportError: No module named _winreg` with dropbox 2.2.0
 
 
-## Setup & Installation
+## Build Instructions
 
 To build:
 ```bash
