@@ -13,13 +13,13 @@ Compile My Style will be a web application with the purpose of helping its users
 * Flask-SQLAlchemy 2.0 (`pip install flask-sqlalchemy`)
 * PostgreSQL (`apt-get install postgresql`)
 * psycopg2 2.5.3 (`pip install psycopg2`)
-* Werkzeug 0.9.6 (`pip install Werkzeug==0.9.6`)
 * dropbox 2.2.0 (`pip install dropbox`)
+* *Werkzeug 0.9.6 (`pip install Werkzeug==0.9.6`)
 
 
 ### Notes about installation
 
-We are installing Werkzeug 0.9.6 because Werkzeug stat seems to cause `ImportError: No module named _winreg` with dropbox 2.2.0
+Only install Werkzeug 0.9.6 if there is an error. On some computers, Werkzeug 0.10.4 stat seems to cause `ImportError: No module named _winreg` with dropbox 2.2.0
 
 
 ## Build Instructions
