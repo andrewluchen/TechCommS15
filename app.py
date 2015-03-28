@@ -112,7 +112,7 @@ def me_upload():
 def show_user(fb_id):
   user = User.query.filter_by(fb_id=fb_id).first()
   if user is None:
-    flash('User %s not found.' % nickname)
+    flash('User %s not found.' % fb_id)
     return redirect(url_for('index'))
   else:
     return render_template('user_profile.html',
