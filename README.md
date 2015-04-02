@@ -1,4 +1,4 @@
-## Compile My Style
+# Compile My Style
 
 ### By Andrew Chen, Patrick Yurky, Joey Fernau, Sally McNichols
 
