@@ -1,7 +1,10 @@
 from app import db
+from sqlalchemy import create_engine, MetaData
 
 class User(db.Model):
   __tablename__ = 'users'
+  __table_args__ = {'extend_existing': True}
+  extend_existing=True
   id = db.Column(db.Integer, primary_key=True)
   fb_id = db.Column(db.String)
   first_name = db.Column(db.String)
@@ -25,11 +28,18 @@ class User(db.Model):
   def get_id(self):
     return unicode(self.id)
 
+recommendation_picture_table = db.Table("recommendedPicture", MetaData(),
+  db.Column('recommendation_id', db.Integer, db.ForeignKey('recommendations.id')),
+  db.Column('picture_id', db.Integer, db.ForeignKey('pictures.id'))) 
+
 class Picture(db.Model):
   __tablename__ = 'pictures'
+  __table_args__ = {'extend_existing': True}
   id = db.Column(db.Integer, primary_key=True)
   file_path = db.Column(db.String, nullable=False)
   profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+  pic_type = db.Column(db.String, nullable=False)
+  recommendations = db.relationship("recommendations", secondary=recommendation_picture_table)
 
   def __init__(self, file_path=None, profile_id=None):
     self.file_path = file_path
@@ -43,8 +53,10 @@ class Picture(db.Model):
 
 class Recommendation(db.Model):
   __tablename__ = 'recommendations'
+  __table_args__ = {'extend_existing': True}
   id = db.Column(db.Integer, primary_key=True)
   profile_id = db.Column(db.Integer, db.ForeignKey('profiles.id'))
+  pictures = db.relationship("pictures", secondary=recommendation_picture_table)
 
   def __init__(self, profile_id=None):
     self.profile_id = profile_id
@@ -57,6 +69,7 @@ class Recommendation(db.Model):
   
 class Profile(db.Model):
   __tablename__ = 'profiles'
+  __table_args__ = {'extend_existing': True}
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
   pictures = db.relationship("Picture")
