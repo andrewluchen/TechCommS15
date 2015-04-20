@@ -10,8 +10,60 @@
 {% include 'navbar.html' %}
     
     <div class="container">
-      <h1>Bootstrap starter template</h1>
-      <p class="lead">Use this document as a way to quickly start any new project.<br> All you get is this text and a mostly barebones HTML document.</p>
+      <div class="page-header">
+        <h1>{[ user.first_name ]} {[ user.last_name ]}</h1>
+      </div>
+      <div class="col-md-8">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>New style</h4>
+          </div>
+          <div class="panel-body">
+            Recommended style goes here.
+          </div>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="panel-heading panel-heading-gray">
+          <i class="fa fa-fw fa-info-circle"></i>Statistics
+        </div>
+        <div class="panel-body">
+          <ul class="list-unstyled">
+            <li>
+              <div class="row">
+                <div class="col-sm-4">
+                  <span class="text-muted">Followers</span>
+                </div>
+                <div class="col-sm-8">Number here</div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-sm-4">
+                  <span class="text-muted">Styles</span>
+                </div>
+                <div class="col-sm-8">Number here</div>
+              </div>
+            </li>
+            <li>
+              <div class="row">
+                <div class="col-sm-4">
+                  <span class="text-muted">Karma</span>
+                </div>
+                <div class="col-sm-8">Number here</div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <h4>About Me</h4>
+          </div>
+          <div class="panel-body">
+            About me text goes here.
+          </div>
+        </div>
+      </div>
     </div><!-- /.container -->
     
 {% include 'footer.html' %}
